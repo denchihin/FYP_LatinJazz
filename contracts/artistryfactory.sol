@@ -1,6 +1,12 @@
-//SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.19;
-contract ArtistryFactory {
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./ownable.sol";
+import "./safemath.sol";
+
+contract ArtistryFactory is Ownable {
+
+using SafeMath for uint256;
 
 event NewArtwork(uint artworkId, string name, uint gene);
 uint geneDigits = 16;
@@ -21,7 +27,7 @@ function _createArtwork(string memory _name, uint _gene) internal {
     artworks.push(Artwork (_name, _gene, uint32 (block.timestamp)));
     uint id = artworks.length -1;
     artworkToOwner[id] = msg.sender;
-    ownerArtworkCount[msg.sender] ++;
+    ownerArtworkCount[msg.sender] = ownerArtworkCount[msg.sender].add(1);
     emit NewArtwork (id, _name, _gene);   
 }
 
