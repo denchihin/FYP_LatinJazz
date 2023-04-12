@@ -23,6 +23,11 @@ Artwork[] public artworks;
 mapping (uint => address) public artworkToOwner;
 mapping (address => uint) ownerArtworkCount;
 
+modifier onlyOwnerOf(uint _arkworkId) {
+    require(msg.sender == artworkToOwner[_arkworkId]);
+    _;
+  }
+
 function _createArtwork(string memory _name, uint _gene) internal {
     artworks.push(Artwork (_name, _gene, uint32 (block.timestamp)));
     uint id = artworks.length -1;
@@ -36,7 +41,7 @@ function _generateRandomGene(string memory _str) private view returns (uint){
     return rand % geneModulus;
 }
 
-function _createNewArtwork(string memory _name) public{
+function createNewArtwork(string memory _name) public{
     require(ownerArtworkCount[msg.sender] == 0);
     uint randGene = _generateRandomGene(_name);
     randGene = randGene - randGene % 100;
