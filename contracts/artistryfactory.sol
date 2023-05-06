@@ -48,5 +48,4 @@ function createNewArtwork(string memory _name) public{
     _createArtwork (_name, randGene);
 }
 
-
 }

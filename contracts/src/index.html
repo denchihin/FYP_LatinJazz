@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>ArtistryFactory front-end</title>
+    <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="web3.min.js"></script>
+    <script language="javascript" type="text/javascript" src="artistryChain_abi.js"></script>
+
+  </head>
+  <body>
+
+    <script>
+        var artistryChain;
+        var userAccount;
+
+        function startApp() {
+            var artistryChainAddress = "0x967E8EAf9E795B862CDFcD2C02BF5814B6270A25";
+            cryptoZombies = new web3js.eth.Contract(artistryChainABI, artistryChainAddress);
+            }  
+        
+            var accountInterval = setInterval(function() {
+         
+         if (web3.eth.accounts[0] !== userAccount) {
+           userAccount = web3.eth.accounts[0];
+
+            };
+
+
+        function getArtwork(id) {
+            return artistryChain.methods.artworks(id).call()
+        }
+        function getParticipant(id) {
+            return artistryChain.methods.participants(id).call()
+        }
+        function getOwnership(id) {
+            return artistryChain.methods.ownership(id).call()
+        }
+
+
+        window.addEventListener('load', function() {
+
+// Checking if Web3 has been injected by the browser (Mist/MetaMask)
+if (typeof web3 !== 'undefined') {
+  // Use Mist/MetaMask's provider
+  web3js = new Web3(web3.currentProvider);
+} else {
+  // Handle the case where the user doesn't have web3. Probably
+  // show them a message telling them to install Metamask in
+  // order to use our app.
+}
+
+// Now you can start your app & access web3js freely:
+startApp()
+
+})
+    </script>
+
+
+
+  </body>
+</html>
