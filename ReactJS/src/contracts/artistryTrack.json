@@ -210,27 +210,27 @@
       "outputs": [
         {
           "internalType": "string",
-          "name": "",
+          "name": "userName",
           "type": "string"
         },
         {
           "internalType": "address",
-          "name": "",
+          "name": "address",
           "type": "address"
         },
         {
           "internalType": "string",
-          "name": "",
+          "name": "participantType",
           "type": "string"
         },
         {
           "internalType": "uint32",
-          "name": "",
+          "name": "participantId",
           "type": "uint32"
         },
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "partGene",
           "type": "uint256"
         }
       ],
@@ -289,37 +289,37 @@
       "outputs": [
         {
           "internalType": "string",
-          "name": "",
+          "name": "artworkName",
           "type": "string"
         },
         {
           "internalType": "string",
-          "name": "",
+          "name": "serialNumber",
           "type": "string"
         },
         {
           "internalType": "uint32",
-          "name": "",
+          "name": "artworkId",
           "type": "uint32"
         },
         {
           "internalType": "uint32",
-          "name": "",
+          "name": "cost",
           "type": "uint32"
         },
         {
           "internalType": "address",
-          "name": "",
+          "name": "artworkOwner",
           "type": "address"
         },
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "atyTimeStamp",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "partGene",
           "type": "uint256"
         }
       ],
@@ -349,7 +349,7 @@
       "outputs": [
         {
           "internalType": "bool",
-          "name": "",
+          "name": "status",
           "type": "bool"
         }
       ],
@@ -368,7 +368,7 @@
       "outputs": [
         {
           "internalType": "uint32[]",
-          "name": "",
+          "name": "ownership_Id",
           "type": "uint32[]"
         }
       ],

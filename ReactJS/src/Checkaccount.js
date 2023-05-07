@@ -20,8 +20,8 @@ function Checkaccount() {
 
     const [email, setEmail] = useState("");
     const [mmAccount, setmmAccount] = useState("");
-    const [participantType, setPartType] = useState("");
-    const [theParticipant, setParticipant] = useState("");
+    const [partType, setPartType] = useState("");
+    const [isPending, setIsPending] = useState(false);
 
     const {contract} = useWeb3(); //connection to the Blockchain smart contract
       
@@ -34,13 +34,18 @@ function Checkaccount() {
           const web3 = new Web3(provider);
           const accounts = await web3.eth.getAccounts();
           const account = accounts[0];
-          const theParticipant = await contract.methods.getParticipant(account).call();
-          setParticipant (theParticipant);
-          setEmail(theParticipant.userName)
-          console.log(theParticipant);
+          const theParticipant = await contract.methods.getParticipant(account).call()
+          let nameP = (theParticipant.userName);
+          let addressP = (theParticipant.address);
+          let typeP =(theParticipant.participantType);
+          setEmail(nameP);
+          setmmAccount(addressP);
+          setPartType(typeP);
+          console.log(nameP , addressP , typeP);
         } else {
           console.log("Non-ethereum browser detected.Please install Metamask");
         }
+        setIsPending(true);
       };
 
 
@@ -66,19 +71,16 @@ return(
 
         <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}>Check your Account detail</h5>
 
-          <MDBInput wrapperClass='mb-4' label='Email address' id='EmailCheck' type='email' size="lg" value={email} onChange={(e)=> setEmail(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Account' id='AccountCheck' type='text' autoComplete="on" size="lg" value={mmAccount} onChange={(e)=> setmmAccount(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Type' id='TypeCheck' type='text' autoComplete="on" size="lg" value={participantType} onChange={(e)=> setPartType(e.target.value)}/>
+        { isPending && <h4 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Registerd Email address</h4>}
+        { isPending && <h5 className="fw-normal pb-3 text-start" style={{letterSpacing: '1px'}}>{email}</h5>}
+        
+        { isPending && <h4 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Account Access</h4>}
+        { isPending && <h5 className="fw-normal pb-3 text-start" style={{letterSpacing: '1px'}}>{partType}</h5>}
 
+        { isPending && <h4 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Account Address</h4>}
+        { isPending && <h5 className="fw-normal pb-3 text-start" style={{letterSpacing: '1px'}}>{mmAccount}</h5>}
 
         <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Check Account</MDBBtn>
-        <a className="small text-muted" href="#!">Forgot password?</a>
-        <p className="mb-5 pb-lg-2" style={{color: '#393f81'}}>Don't have an account? <a href="#!" style={{color: '#393f81'}}>Register here</a></p>
-
-        <div className='d-flex flex-row justify-content-start'>
-          <a href="#!" className="small text-muted me-1">Terms of use.</a>
-          <a href="#!" className="small text-muted">Privacy policy</a>
-        </div>
 
       </MDBCardBody>
     </MDBCol>

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import './index.css';
 import Web3 from 'web3';
 import useWeb3 from "./useWeb3";
+import Select from 'react-select';
+
 
 import {
     MDBBtn,MDBContainer,MDBCard,
@@ -16,21 +18,25 @@ import {
   }
   from 'mdb-react-ui-kit';
 
-
 function Signin() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [participantType, setPartType] = useState("");
     const [authentic, setAuthenic] = useState(false);
+    const [checkPass, setCheckPass] = useState(true);
 
     const {contract} = useWeb3(); //connection to the Blockchain smart contract
 
     const navigate = useNavigate();
+    
+    // let typeP = ("");
+    // const handleChange = (typeP) => (
+    //   setPartType(typeP)
+    // )
 
     const onConnect = async (e) => {
         e.preventDefault();
-        setAuthenic (false)
         console.log(authentic);
         let provider = window.ethereum;
         if (typeof provider !== "undefined") {
@@ -47,8 +53,12 @@ function Signin() {
             }
             else if ( theAuthentic == true && participantType =="Supplier"){
               navigate ("/Supplier")
-              } else {
-                console.log("Account or Password incorrect");
+              } 
+              else if ( theAuthentic == true && participantType =="Consumer"){
+                navigate ("/Consumer")
+                }else { 
+                  setCheckPass(false);//Password incorrect popup message setter
+                  console.log("Account or Password incorrect"); //Password incorrect
               }
         } else {
           console.log("Non-ethereum browser detected.Please install Metamask");
@@ -81,15 +91,25 @@ return(
           <MDBInput wrapperClass='mb-4' label='Email address' id='EmailSignin' type='email' size="lg" value={email} onChange={(e)=> setEmail(e.target.value)}/>
           <MDBInput wrapperClass='mb-4' label='Password' id='PassSignin' type='password' autoComplete="on" size="lg" value={password} onChange={(e)=> setPassword(e.target.value)}/>
           <MDBInput wrapperClass='mb-4' label='Type' id='TypeSignin' type='text' autoComplete="on" size="lg" value={participantType} onChange={(e)=> setPartType(e.target.value)}/>
+          
+          {/* Select Menu */}
+          {/* <select vaule={typeP} onChange={handleChange}>
+            <option value="fruit">Fruit</option>
+            <option value="vegetable">Vegetable</option>
+            <option value="meat">Meat</option>
+          </select> */}
 
+          {/* incorrect password setter */}
+          {!checkPass && <p className="fw-bolder small text-center " style={{ letterSpacing: '1px'}}>Password or Email address incorrect! Please enter again</p>}
+          
+          <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Login</MDBBtn>
 
-        <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Login</MDBBtn>
         <a className="small text-muted" href="#!">Forgot password?</a>
-        <p className="mb-5 pb-lg-2" style={{color: '#393f81'}}>Don't have an account? <a href="#!" style={{color: '#393f81'}}>Register here</a></p>
+        <p className="mb-5 pb-lg-2" style={{color: '#393f81'}}>Don't have an account? <a href="http://localhost:3000/Signup" style={{color: '#393f81'}}>Register here</a></p>
 
         <div className='d-flex flex-row justify-content-start'>
-          <a href="#!" className="small text-muted me-1">Terms of use.</a>
-          <a href="#!" className="small text-muted">Privacy policy</a>
+          <a href="https://www.sandro-paris.com.hk/en_HK/membership-term-and-condition/MembershipTermAndCondition.html" className="small text-muted me-1">Terms of use.</a>
+          <a href="https://www.smcp.com/en/privacy-policy/" className="small text-muted">Privacy policy</a>
         </div>
 
       </MDBCardBody>
