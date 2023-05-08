@@ -2,6 +2,9 @@ import {useState} from "react";
 import './index.css';
 import Web3 from 'web3';
 import useWeb3 from "./useWeb3";
+import Tracklist from "./Tracklist";
+import useFetch from "./useFetch";
+import { useNavigate } from "react-router-dom";
 
 import {
     MDBBtn,MDBContainer,MDBCard,
@@ -17,19 +20,31 @@ import {
 
 function Tracker() {
 
+    function refreshPage() {
+        window.location.reload(false);
+      }
+    
     const [barcode, setBarcode] = useState("");
-    const [artName, setArtName] = useState("");
-    const [serialNum, setSerialNum] = useState("");
-    const [artId, setArtId] = useState("");
-    const [cost, setCost] = useState("");
-    const [ownerAds, setOwnerAds] = useState("");
-    const [atyTime, setAtyTime] = useState("");
-    const [artGene, setArtGene] = useState("");
-
-    const [isPending, setIsPending] = useState(false);
+    const [olist, setOwnerlist] = useState(0);
 
     const {contract} = useWeb3(); //connection to the Blockchain smart contract
-      
+
+    const { data: trackers, isPending, error } = useFetch('http://localhost:9788/trackers')
+
+    const natvigate = useNavigate();
+    
+    const handleReset = () => {
+        console.log(olist)
+        var b ;
+        for(b=2; b < 10 ; b++){
+        fetch('http://localhost:9788/trackers/' + b, {
+            method: 'DELETE'
+          }).then(() => {
+            natvigate('/CheckAW');
+          }) 
+        }
+    }
+    
     const onConnect = async (e) => {
         e.preventDefault();
 
@@ -40,27 +55,40 @@ function Tracker() {
           const accounts = await web3.eth.getAccounts();
           const account = accounts[0];
             const theArtwork = await contract.methods.getProvenance(barcode).call()
-            const ownerList = await contract.methods.getOwnership(theArtwork).call()
-        //   let artName = (theArtwork.artworkName);
-        //   let snNum = (theArtwork.serialNumber);
-        //   let artId =(theArtwork.artworkId);
-        //   let costNum = (theArtwork.cost);
-        //   let ownerAds =(theArtwork.artworkOwner);
-        //   let timeStp = (theArtwork.atyTimeStamp);
-        //   let artGene =(theArtwork.partGene);
-        //     setArtName(artName);
-        //     setSerialNum(snNum);
-        //     setArtId(artId);
-        //     setCost(costNum);
-        //     setOwnerAds(ownerAds);
-        //     setAtyTime(timeStp);
-        //     setArtGene(artGene);
-        console.log(ownerList)
+            let ownerList = (theArtwork);
+            var list = ownerList.length;
+            var loopData = ''
+            var i ;
+          for(i=0; i < ownerList.length; i++){
+              loopData = `${ownerList[i]}`
+              const history = await contract.methods.getOwnership(loopData).call()
+              let getAddress = (history.ownerAddress);
+              let getArtworkid = (history.artworkId);
+              let currentTimestamp = (history.trdTimeStamp);
+              let trdtime = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(currentTimestamp)
+              const ownership = await contract.methods.getParticipant(getAddress).call()
+              let owner = (ownership.userName);
+              let ownertype = (ownership.participantType)
+              const artName = await contract.methods.getArtwork(getArtworkid).call()
+              let artTitle = (artName.artworkName);
+              let cost = (artName.cost);
 
+            // Adding return data to a JSON file
+                const blog = { owner , ownertype , trdtime, cost };
+                fetch('http://localhost:9788/trackers/', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(blog)
+                    }).then(() => {
+                    console.log('new blog added');
+                    })
+                    refreshPage();
+          }
+          setOwnerlist(list + 2);
         } else {
           console.log("Non-ethereum browser detected.Please install Metamask");
         }
-        setIsPending(true);
+
       };
 
 
@@ -84,32 +112,19 @@ return(
           <span className="h2 fw-bold mb-0">ArtistryTracker</span>
         </div>
 
-        <h5 className="fw-normal my-4 pb-1" style={{letterSpacing: '1px'}}>Check your Artwork information</h5>
-
-        { isPending && <h4 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Artwork Name</h4>}
-        { isPending && <h5 className="fw-normal pb-3 text-start" style={{letterSpacing: '1px'}}>{artName}</h5>}
+        <h5 className="fw-normal my-4 pb-1" style={{letterSpacing: '1px'}}>Transaction History</h5>
         
-        { isPending && <h4 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Serial number</h4>}
-        { isPending && <h5 className="fw-normal pb-3 text-start" style={{letterSpacing: '1px'}}>{serialNum}</h5>}
-
-        { isPending && <h5 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Cost</h5>}
-        { isPending && <p className="fw-normal pb-1 text-start" style={{letterSpacing: '1px'}}>{cost}</p>}
-        
-        { isPending && <h5 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Owner Address</h5>}
-        { isPending && <p className="fw-normal pb-1 text-start" style={{letterSpacing: '1px'}}>{ownerAds}</p>}
-
-        { isPending && <h5 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Create Time</h5>}
-        { isPending && <p className="fw-normal pb-1 text-start" style={{letterSpacing: '1px'}}>{atyTime}</p>}
-        
-        { isPending && <h6 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Artwork ID</h6>}
-        { isPending && <p className="fw-normal  text-start" style={{letterSpacing: '1px'}}>{artId}</p>}
-
-        { isPending && <h6 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Artwork Gene</h6>}
-        { isPending && <p className="fw-normal text-start" style={{letterSpacing: '1px'}}>{artGene}</p>}
+        <div className="Home">
+            {error && <div> {error} </div>}
+            {isPending && <div>Scan artwork barcode... </div>  }
+            {trackers && < Tracklist trackers={trackers}/> } 
+        </div>
 
 
         <MDBInput wrapperClass='mb-4' label='Barcode' id='barcodeChk' type='text' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
         <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Submit</MDBBtn>
+        
+        <MDBBtn className="mb-4 px-5" color='dark' size='lg' onClick={handleReset}>Return to Manu</MDBBtn>
 
       </MDBCardBody>
     </MDBCol>

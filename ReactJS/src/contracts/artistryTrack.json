@@ -388,17 +388,17 @@
       "outputs": [
         {
           "internalType": "uint32",
-          "name": "",
+          "name": "artworkId",
           "type": "uint32"
         },
         {
           "internalType": "address",
-          "name": "",
+          "name": "ownerAddress",
           "type": "address"
         },
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "trdTimeStamp",
           "type": "uint256"
         }
       ],

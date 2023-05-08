@@ -1,0 +1,11 @@
+{
+  "trackers": [
+    {
+      "owner": "Owner",
+      "ownertype": "Manufactor",
+      "trdtime": "dd/mm/yyyy",
+      "cost": 3000,
+      "id": 1
+    }
+  ]
+}
