@@ -105,7 +105,7 @@ return(
         { isPending && <p className="fw-normal text-start" style={{letterSpacing: '1px'}}>{artGene}</p>}
 
 
-        <MDBInput wrapperClass='mb-4' label='Barcode' id='barcodeChk' type='text' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
+        <MDBInput wrapperClass='mb-4' required label='Barcode' id='barcodeChk' type='number' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
         <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Submit</MDBBtn>
 
       </MDBCardBody>

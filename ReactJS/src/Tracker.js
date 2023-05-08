@@ -25,24 +25,24 @@ function Tracker() {
       }
     
     const [barcode, setBarcode] = useState("");
-    const [olist, setOwnerlist] = useState(0);
 
     const {contract} = useWeb3(); //connection to the Blockchain smart contract
 
-    const { data: trackers, isPending, error } = useFetch('http://localhost:9788/trackers')
+    const { data: trackers, isPending, error } = useFetch('http://localhost:8000/trackers')
 
     const natvigate = useNavigate();
     
     const handleReset = () => {
-        console.log(olist)
-        var b ;
-        for(b=2; b < 10 ; b++){
-        fetch('http://localhost:9788/trackers/' + b, {
+        console.log(Object.keys(trackers).length)
+
+        for(let b=1; b <= Object.keys(trackers).length ; b++){
+        fetch('http://localhost:8000/trackers/' + b, {
             method: 'DELETE'
-          }).then(() => {
-            natvigate('/CheckAW');
+          })
+          .then(() => { console.log ("roll number", b ,"has been deleted ");
           }) 
         }
+        // refreshPage();
     }
     
     const onConnect = async (e) => {
@@ -56,7 +56,6 @@ function Tracker() {
           const account = accounts[0];
             const theArtwork = await contract.methods.getProvenance(barcode).call()
             let ownerList = (theArtwork);
-            var list = ownerList.length;
             var loopData = ''
             var i ;
           for(i=0; i < ownerList.length; i++){
@@ -75,16 +74,15 @@ function Tracker() {
 
             // Adding return data to a JSON file
                 const blog = { owner , ownertype , trdtime, cost };
-                fetch('http://localhost:9788/trackers/', {
+                fetch('http://localhost:8000/trackers/', {
                     method: 'POST',
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(blog)
                     }).then(() => {
                     console.log('new blog added');
                     })
-                    refreshPage();
           }
-          setOwnerlist(list + 2);
+          refreshPage();
         } else {
           console.log("Non-ethereum browser detected.Please install Metamask");
         }
@@ -121,7 +119,7 @@ return(
         </div>
 
 
-        <MDBInput wrapperClass='mb-4' label='Barcode' id='barcodeChk' type='text' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
+        <MDBInput wrapperClass='mb-4' required label='Barcode' id='barcodeChk' type='text' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
         <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Submit</MDBBtn>
         
         <MDBBtn className="mb-4 px-5" color='dark' size='lg' onClick={handleReset}>Return to Manu</MDBBtn>

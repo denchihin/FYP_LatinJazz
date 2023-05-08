@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import './index.css';
 import Web3 from 'web3';
 import useWeb3 from "./useWeb3";
-import Select from 'react-select';
-
+import Swal from "sweetalert2";
 
 import {
     MDBBtn,MDBContainer,MDBCard,
@@ -14,7 +13,6 @@ import {
     MDBCol,
     MDBIcon,
     MDBInput,
-    MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem
   }
   from 'mdb-react-ui-kit';
 
@@ -29,11 +27,6 @@ function Signin() {
     const {contract} = useWeb3(); //connection to the Blockchain smart contract
 
     const navigate = useNavigate();
-    
-    // let typeP = ("");
-    // const handleChange = (typeP) => (
-    //   setPartType(typeP)
-    // )
 
     const onConnect = async (e) => {
         e.preventDefault();
@@ -58,7 +51,12 @@ function Signin() {
                 navigate ("/Consumer")
                 }else { 
                   setCheckPass(false);//Password incorrect popup message setter
-                  console.log("Account or Password incorrect"); //Password incorrect
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Email or Password incorrect!',
+                    footer: '<a href="http://localhost:3000">Please contact ArtistryTrack for account</a>'
+                  })                  
               }
         } else {
           console.log("Non-ethereum browser detected.Please install Metamask");
@@ -88,9 +86,9 @@ return(
 
         <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}>Sign into your account</h5>
 
-          <MDBInput wrapperClass='mb-4' label='Email address' id='EmailSignin' type='email' size="lg" value={email} onChange={(e)=> setEmail(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Password' id='PassSignin' type='password' autoComplete="on" size="lg" value={password} onChange={(e)=> setPassword(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Type' id='TypeSignin' type='text' autoComplete="on" size="lg" value={participantType} onChange={(e)=> setPartType(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Email address' id='EmailSignin' type='email' size="lg" value={email} onChange={(e)=> setEmail(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Password' id='PassSignin' type='password' autoComplete="on" size="lg" value={password} onChange={(e)=> setPassword(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Type' id='TypeSignin' type='text' autoComplete="on" size="lg" value={participantType} onChange={(e)=> setPartType(e.target.value)}/>
           
           {/* Select Menu */}
           {/* <select vaule={typeP} onChange={handleChange}>

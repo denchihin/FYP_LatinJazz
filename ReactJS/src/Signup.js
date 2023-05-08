@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import './index.css';
 import Web3 from 'web3';
 import useWeb3 from "./useWeb3";
+import Swal from "sweetalert2";
 
 import {
     MDBBtn,MDBContainer,MDBCard,
@@ -22,7 +23,6 @@ function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [participantType, setPartType] = useState("");
-
     const {contract} = useWeb3(); //connection to the Blockchain smart contract
     
     const navigate = useNavigate();
@@ -38,11 +38,14 @@ function Signup() {
           
           await contract.methods.addParticipant(email, password, account , participantType).send({ from: account});
           const theParticipant = await contract.methods.getParticipant(account).call();
-
-          setNewParticipant(theParticipant);
-          console.log(theParticipant);
-
-          navigate("/");
+          setNewParticipant(theParticipant.userName);
+          console.log(newParticipant);
+          Swal.fire({
+            icon: 'success',
+            title: 'Account Created',
+            text: 'You can login with your metamask account',
+            footer: '<a href="http://localhost:3000">Start ArtistryTrack right now!</a>'
+          })
   
         } else {
           console.log("Non-ethereum browser detected.Please install Metamask");
@@ -72,9 +75,9 @@ return(
 
         <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}>SignUp a new account</h5>
 
-          <MDBInput wrapperClass='mb-4' label='Email address' id='EmailSignup' type='email' size="lg" value={email} onChange={(e)=> setEmail(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Password' id='PassSignup' type='password' autoComplete="on" size="lg" value={password} onChange={(e)=> setPassword(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Type' id='TypeSignup' type='text' autoComplete="on" size="lg" value={participantType} onChange={(e)=> setPartType(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Email address' id='EmailSignup' type='email' size="lg" value={email} onChange={(e)=> setEmail(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Password' id='PassSignup' type='password' autoComplete="on" size="lg" value={password} onChange={(e)=> setPassword(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Type' id='TypeSignup' type='text' autoComplete="on" size="lg" value={participantType} onChange={(e)=> setPartType(e.target.value)}/>
 
         <MDBBtn className="mb-4 px-5" color='dark' size='lg'>SUBMIT</MDBBtn>
 {/* 

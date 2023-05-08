@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import './index.css';
 import Web3 from 'web3';
 import useWeb3 from "./useWeb3";
+import Swal from "sweetalert2";
 
 import {
     MDBBtn,MDBContainer,MDBCard,
@@ -48,21 +49,45 @@ function Manufacturer() {
           const account = accounts[0];
           
           await contract.methods.addArtwork(account, barcode , artName , serialNum , cost).send({ from: account});
-          const theArtwork = await contract.methods.getArtwork(barcode).call();
-          let nameArt = theArtwork.artworksName
-          setArtwork(theArtwork.artworkName);
-          console.log(artwork , theArtwork.artworkName);
-          // navigate("/complete");
+          toggleShow();
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Artwork has been Created',
+            showConfirmButton: false,
+            timer: 1500
+          })
+
+          navigate("/Manufacturer");
   
         } else {
           console.log("Non-ethereum browser detected.Please install Metamask");
         }
       };
 
-    const onConfirm = async (e) =>{
+        const onConfirm = async (e) =>{
         e.preventDefault();
         toggleShow();
-    }
+        }
+
+        const onArtSearch = async (e) =>{
+        navigate("/CheckAW");
+        }
+        const onQuit = async (e) =>{
+        navigate("/");
+        }
+        const onTransfer = async (e) =>{
+          navigate("/Transfer");
+          }
+          const onTrack = async (e) =>{
+              navigate("/Tracker");
+              }
+        const onCreateAcc = async (e) =>{
+        navigate("/Signup");
+        }
+        const onAccSearch = async (e) =>{
+        navigate("/CheckAC");
+        }
 
 return(
 
@@ -86,12 +111,18 @@ return(
 
         <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}>Create new Artowkrs in ArtistryTrack</h5>
 
-          <MDBInput wrapperClass='mb-4' label='Barcode' id='barcode' type='text' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Artwork Name' id='artName' type='text'  size="lg" value={artName} onChange={(e)=> setArtName(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Serial Number' id='serialNum' type='text'  size="lg" value={serialNum} onChange={(e)=> setSerialNum(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' label='Cost of the Artwork' id='cost' type='number'  size="lg" value={cost} onChange={(e)=> setCost(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Barcode' id='barcode' type='text' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Artwork Name' id='artName' type='text'  size="lg" value={artName} onChange={(e)=> setArtName(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Serial Number' id='serialNum' type='text'  size="lg" value={serialNum} onChange={(e)=> setSerialNum(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Price of the Artwork' id='cost' type='number'  size="lg" value={cost} onChange={(e)=> setCost(e.target.value)}/>
 
         <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Create new Artwork</MDBBtn>
+        <MDBBtn onClick={onArtSearch} className="mb-4 px-5" color='dark' size='lg'>Search Artowrk</MDBBtn>
+        <MDBBtn onClick={onTrack} className="mb-4 px-5" color='dark' size='lg'>Tracker</MDBBtn>
+        <MDBBtn onClick={onTransfer} className="mb-4 px-5" color='dark' size='lg'>Transfer</MDBBtn>
+        <MDBBtn onClick={onCreateAcc} className="mb-4 px-5" color='dark' size='lg'>Create Account</MDBBtn>
+        <MDBBtn onClick={onAccSearch} className="mb-4 px-5" color='dark' size='lg'>Check Account</MDBBtn>
+        <MDBBtn onClick={onQuit} className="mb-4 px-4" color='white' size='lg'>Log out</MDBBtn>
 
         <MDBModal tabIndex='-1' show={centredModal} setShow={setCentredModal}>
             <MDBModalDialog centered>
@@ -101,14 +132,14 @@ return(
                 <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
                 </MDBModalHeader>
                 <MDBModalBody>
-                <h2>BarCode: {barcode}</h2>
-                <h2>Artwork Name: {artName}</h2>
-                <h2>Serial Number: {serialNum}</h2>
-                <h2>cost: {cost}</h2>
+                <h4 className="fw-bolder pb-3 text-start">BarCode: {barcode}</h4>
+                <h4 className="fw-bolder pb-3 text-start">Artwork Name: {artName}</h4>
+                <h5 className="fw-normal pb-3 text-start">Serial Number: {serialNum}</h5>
+                <h5 className="fw-normal pb-3 text-start">Price: {cost}</h5>
                 </MDBModalBody>
                 <MDBModalFooter>
                 <MDBBtn  className="mb-4 px-5" color='secondary' size='lg'> Close </MDBBtn>
-                <MDBBtn onClick={onConnect} className="mb-4 px-5" color='dark' size='lg' >Save changes</MDBBtn>
+                <MDBBtn onClick={onConnect} className="mb-4 px-5" color = 'dark' size='lg' >Save changes</MDBBtn>
                 </MDBModalFooter>
             </MDBModalContent>
             </MDBModalDialog>
