@@ -42,7 +42,7 @@ function Tracker() {
           .then(() => { console.log ("roll number", b ,"has been deleted ");
           }) 
         }
-        // refreshPage();
+        natvigate('/Manufacturer');
     }
     
     const onConnect = async (e) => {
@@ -64,7 +64,8 @@ function Tracker() {
               let getAddress = (history.ownerAddress);
               let getArtworkid = (history.artworkId);
               let currentTimestamp = (history.trdTimeStamp);
-              let trdtime = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(currentTimestamp)
+              let newTimeStp = (currentTimestamp * 1000);
+              let trdtime = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(newTimeStp)
               const ownership = await contract.methods.getParticipant(getAddress).call()
               let owner = (ownership.userName);
               let ownertype = (ownership.participantType)
@@ -73,7 +74,7 @@ function Tracker() {
               let cost = (artName.cost);
 
             // Adding return data to a JSON file
-                const blog = { owner , ownertype , trdtime, cost };
+                const blog = { owner , artTitle, ownertype , trdtime, cost };
                 fetch('http://localhost:8000/trackers/', {
                     method: 'POST',
                     headers: { "Content-Type": "application/json" },
@@ -110,7 +111,7 @@ return(
           <span className="h2 fw-bold mb-0">ArtistryTracker</span>
         </div>
 
-        <h5 className="fw-normal my-4 pb-1" style={{letterSpacing: '1px'}}>Transaction History</h5>
+        <h5 className="fw-normal my-4 pb-1" style={{letterSpacing: '1px'}}  >Transaction History</h5>
         
         <div className="Home">
             {error && <div> {error} </div>}

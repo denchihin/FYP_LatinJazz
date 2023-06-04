@@ -111,10 +111,10 @@ return(
 
         <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}>Create new Artowkrs in ArtistryTrack</h5>
 
-          <MDBInput wrapperClass='mb-4' required label='Barcode' id='barcode' type='text' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Barcode / NFC' id='barcode' type='text' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
           <MDBInput wrapperClass='mb-4' required label='Artwork Name' id='artName' type='text'  size="lg" value={artName} onChange={(e)=> setArtName(e.target.value)}/>
           <MDBInput wrapperClass='mb-4' required label='Serial Number' id='serialNum' type='text'  size="lg" value={serialNum} onChange={(e)=> setSerialNum(e.target.value)}/>
-          <MDBInput wrapperClass='mb-4' required label='Price of the Artwork' id='cost' type='number'  size="lg" value={cost} onChange={(e)=> setCost(e.target.value)}/>
+          <MDBInput wrapperClass='mb-4' required label='Price' id='cost' type='number'  size="lg" value={cost} onChange={(e)=> setCost(e.target.value)}/>
 
         <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Create new Artwork</MDBBtn>
         <MDBBtn onClick={onArtSearch} className="mb-4 px-5" color='dark' size='lg'>Search Artowrk</MDBBtn>
@@ -128,18 +128,19 @@ return(
             <MDBModalDialog centered>
             <MDBModalContent>
                 <MDBModalHeader>
-                <MDBModalTitle>Modal title</MDBModalTitle>
+                <MDBModalTitle>Create New Artistry Product</MDBModalTitle>
                 <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
                 </MDBModalHeader>
                 <MDBModalBody>
-                <h4 className="fw-bolder pb-3 text-start">BarCode: {barcode}</h4>
-                <h4 className="fw-bolder pb-3 text-start">Artwork Name: {artName}</h4>
-                <h5 className="fw-normal pb-3 text-start">Serial Number: {serialNum}</h5>
-                <h5 className="fw-normal pb-3 text-start">Price: {cost}</h5>
+                <h4 className="fw-normal pb-3 text-start">BarCode/NFC: {barcode}</h4>
+                <h5 className="fw-normal pb-3 text-start">Artwork Name: </h5>
+                <h3 className="fw-bold pb-3 text-start">{artName}</h3>
+                <h5 className="fw-bold pb-3 text-start">Serial Number: {serialNum}</h5>
+                <h5 className="fw-bold pb-3 text-start">Price: {cost}</h5>
                 </MDBModalBody>
                 <MDBModalFooter>
                 <MDBBtn  className="mb-4 px-5" color='secondary' size='lg'> Close </MDBBtn>
-                <MDBBtn onClick={onConnect} className="mb-4 px-5" color = 'dark' size='lg' >Save changes</MDBBtn>
+                <MDBBtn onClick={onConnect} className="mb-4 px-5" color = 'dark' size='lg' >Confirm</MDBBtn>
                 </MDBModalFooter>
             </MDBModalContent>
             </MDBModalDialog>

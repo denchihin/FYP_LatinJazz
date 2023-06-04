@@ -1,4 +1,5 @@
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import './index.css';
 import Web3 from 'web3';
 import useWeb3 from "./useWeb3";
@@ -25,8 +26,11 @@ function Checkartwork() {
     const [ownerAds, setOwnerAds] = useState("");
     const [atyTime, setAtyTime] = useState("");
     const [artGene, setArtGene] = useState("");
+    const [ownerName, setOwnerName] = useState("");
 
     const [isPending, setIsPending] = useState(false);
+
+    const natvigate = useNavigate();
 
     const {contract} = useWeb3(); //connection to the Blockchain smart contract
       
@@ -40,27 +44,34 @@ function Checkartwork() {
           const accounts = await web3.eth.getAccounts();
           const account = accounts[0];
           const theArtwork = await contract.methods.getArtwork(barcode).call()
+          let ownerAds =(theArtwork.artworkOwner);
+          const theParticipant = await contract.methods.getParticipant(ownerAds).call()
+          let nameP = (theParticipant.userName);
           let artName = (theArtwork.artworkName);
           let snNum = (theArtwork.serialNumber);
           let artId =(theArtwork.artworkId);
           let costNum = (theArtwork.cost);
-          let ownerAds =(theArtwork.artworkOwner);
           let timeStp = (theArtwork.atyTimeStamp);
+          let newTimeStp = (timeStp * 1000);
+          let trdtime = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(newTimeStp)
           let artGene =(theArtwork.partGene);
             setArtName(artName);
             setSerialNum(snNum);
             setArtId(artId);
             setCost(costNum);
             setOwnerAds(ownerAds);
-            setAtyTime(timeStp);
+            setAtyTime(trdtime);
             setArtGene(artGene);
+            setOwnerName(nameP);
         } else {
           console.log("Non-ethereum browser detected.Please install Metamask");
         }
         setIsPending(true);
       };
 
-
+      const onConfirm = () =>{
+        natvigate('/Transfer');
+      }
 return(
 
 <form onSubmit={onConnect}>
@@ -90,8 +101,11 @@ return(
         { isPending && <h5 className="fw-normal pb-3 text-start" style={{letterSpacing: '1px'}}>{serialNum}</h5>}
 
         { isPending && <h5 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Cost</h5>}
-        { isPending && <p className="fw-normal pb-1 text-start" style={{letterSpacing: '1px'}}>{cost}</p>}
+        { isPending && <p className="fw-normal pb-1 text-start" style={{letterSpacing: '1px'}}>HKD$ {cost}</p>}
         
+        { isPending && <h5 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Owner</h5>}
+        { isPending && <p className="fw-normal pb-1 text-start" style={{letterSpacing: '1px'}}>{ownerName}</p>}
+
         { isPending && <h5 className="fw-bolder text-start" style={{letterSpacing: '1px'}}>Owner Address</h5>}
         { isPending && <p className="fw-normal pb-1 text-start" style={{letterSpacing: '1px'}}>{ownerAds}</p>}
 
@@ -107,6 +121,7 @@ return(
 
         <MDBInput wrapperClass='mb-4' required label='Barcode' id='barcodeChk' type='number' size="lg" value={barcode} onChange={(e)=> setBarcode(e.target.value)}/>
         <MDBBtn className="mb-4 px-5" color='dark' size='lg'>Submit</MDBBtn>
+        {isPending && (<MDBBtn className="mb-4 px-5" color='dark' size='lg' onClick={onConfirm}>Transfer Product </MDBBtn>)}
 
       </MDBCardBody>
     </MDBCol>

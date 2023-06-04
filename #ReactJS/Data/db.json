@@ -1,0 +1,19 @@
+{
+  "trackers": [
+    {
+      "owner": "",
+      "ownertype": "",
+      "trdtime": "",
+      "cost": 0,
+      "id": 0
+    },
+    {
+      "owner": "nelson.tang@smcp.com",
+      "artTitle": "SELINE Medium Triomphe Bag",
+      "ownertype": "Supplier",
+      "trdtime": "06/04/2023, 09:29:56 PM",
+      "cost": "32000",
+      "id": 1
+    }
+  ]
+}

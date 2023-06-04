@@ -11,7 +11,7 @@ import Checkartwork from './Checkartwork';
 import Signup from './Signup'
 import Transfer from './Transfer'
 import Tracker from './Tracker'
-
+import ShoppingCart from './ShoppingCart';
 
 
 function App() {
@@ -29,6 +29,7 @@ function App() {
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Transfer" element={<Transfer />} />
           <Route path="/Tracker" element={<Tracker />} />
+          <Route path="/Shop" element={<ShoppingCart />} />
           <Route path="*" element={<NotFound/>} />
         </Routes>
       </BrowserRouter>
